@@ -11,7 +11,6 @@ const InputForm = () => {
     dropdown: "",
     slider: "",
     textarea: "",
-    submit: "",
   });
 
   const formChange = (e) => {
