@@ -30,7 +30,7 @@ const ToDoForm = () => {
   };
 
   const editValue = (index) => {
-    setGetValue((pehlekaData) => pehlekaData.map((_, i) => i !== index));
+    
   };
 
   const deleteValue = (index) => {
