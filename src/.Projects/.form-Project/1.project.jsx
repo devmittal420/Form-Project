@@ -6,16 +6,17 @@ const InputForm = () => {
     email: "",
     password: "",
     bio: "",
-    checkBox: "",
     radio: "",
     dropdown: "",
     slider: "",
     textarea: "",
   });
 
+  const { checkbBox, setCheckBox } = useState("");
+
   const formChange = (e) => {
-    const { name, value } = e.target;
-    console.log({ name, value });
+    const { name, value, checked } = e.target;
+    console.log({ name, value, checked });
 
     setForm((pehleKaForm) => ({
       ...pehleKaForm,
@@ -71,10 +72,10 @@ const InputForm = () => {
         />
       </div>
       <div className="form">
-        <span>
+        <div>
           <input type="checkbox" name="checkBox" onChange={formChange} />
-          Check me
-        </span>
+          <span>Check me</span>
+        </div>
       </div>
       <div className="form">
         <span>

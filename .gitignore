@@ -31,3 +31,7 @@ src/Day-4/3.AdvanceForm.jsx
 # Ignoring directories
 src/Day-3/
 src/Day-2/
+src/Day-4/
+src/Day-5/
+
+.gitignore
