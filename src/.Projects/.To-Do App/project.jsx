@@ -1,29 +1,40 @@
 import { useState } from "react";
 
 const ToDoForm = () => {
-  const [form, setForm] = useState("");
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+  });
   const [getValue, setGetValue] = useState([]);
 
   const changeValue = (e) => {
-    setForm(e.target.value);
+    const { name, value } = e.target;
+    setForm((pehlekaData) => ({
+      ...pehlekaData,
+      [name]: value,
+    }));
   };
 
   const submitValue = (e) => {
     e.preventDefault();
-    console.log(form);
-    console.log(getValue);
-    
+    // console.log(form);
+    // console.log(getValue);
 
-    if (form) {
-      setGetValue((prevValues) => [...prevValues, form]);
-      setForm("");
+    if (form.title && form.description) {
+      setGetValue((pehlekaData) => [...pehlekaData, form]);
+      setForm({
+        title: "",
+        description: "",
+      });
     }
   };
 
-  const editValue = (index) => {};
+  const editValue = (index) => {
+    setGetValue((pehlekaData) => pehlekaData.map((_, i) => i !== index));
+  };
 
   const deleteValue = (index) => {
-    setGetValue((prevValues) => prevValues.filter((_, i) => i !== index));
+    setGetValue((pehlekaData) => pehlekaData.filter((_, i) => i !== index));
   };
 
   return (
@@ -32,9 +43,18 @@ const ToDoForm = () => {
       <form onSubmit={submitValue}>
         <div className="searchForm" style={{ marginBottom: "10px" }}>
           <input
-            type="search"
-            placeholder="Search here"
-            value={form}
+            type="text"
+            name="title"
+            placeholder="Title"
+            value={form.title}
+            onChange={changeValue}
+            className="searchColor"
+          />
+          <input
+            type="text"
+            name="description"
+            placeholder="Description"
+            value={form.description}
             onChange={changeValue}
             className="searchColor"
           />
@@ -46,7 +66,9 @@ const ToDoForm = () => {
       <div>
         {getValue.map((item, index) => (
           <div key={index} style={{ marginBottom: "10px" }}>
-            <span>{item}</span>
+            <strong>Title: {item.title}</strong>
+            <br />
+            <strong>Description: {item.description}</strong>
             <button className="editClass" onClick={() => editValue(index)}>
               Edit
             </button>
