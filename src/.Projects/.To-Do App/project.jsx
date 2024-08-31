@@ -30,7 +30,7 @@ const ToDoForm = () => {
   };
 
   const editValue = (index) => {
-    
+
   };
 
   const deleteValue = (index) => {
@@ -45,16 +45,16 @@ const ToDoForm = () => {
           <input
             type="text"
             name="title"
-            placeholder="Title"
             value={form.title}
+            placeholder="Title"
             onChange={changeValue}
             className="searchColor"
           />
           <input
             type="text"
             name="description"
-            placeholder="Description"
             value={form.description}
+            placeholder="Description"
             onChange={changeValue}
             className="searchColor"
           />
@@ -65,14 +65,15 @@ const ToDoForm = () => {
       </form>
       <div>
         {getValue.map((item, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
-            <strong>Title: {item.title}</strong>
+          <div key={index} style={{ marginBottom: "10px", border: "2px solid black", padding:"10px", width:"300px"}}>
+            <strong>Title: </strong>{item.title}
             <br />
-            <strong>Description: {item.description}</strong>
-            <button className="editClass" onClick={() => editValue(index)}>
+            <strong>Description: </strong>{item.description}
+            <br />
+            <button className="editClass" style={{margin:"4px"}} onClick={() => editValue(index)}>
               Edit
             </button>
-            <button className="deleteClass" onClick={() => deleteValue(index)}>
+            <button className="deleteClass" style={{margin: "4px"}} onClick={() => deleteValue(index)}>
               Delete
             </button>
           </div>
