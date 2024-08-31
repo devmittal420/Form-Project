@@ -34,4 +34,8 @@ src/Day-2/
 src/Day-4/
 src/Day-5/
 
+#Ignore .gitignore files
 .gitignore
+
+# Ignore Day-6 stale closure files
+src/Day-6/1.stale_closure.jsx

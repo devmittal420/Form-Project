@@ -13,7 +13,9 @@ import { createRoot } from 'react-dom/client'
 // import EULA from './Day-4/4. checkbox';
 // import EULAObj from './Day-5/1.checkbox';
 // import Radio from './Day-5/2.radio';
-import ToDoForm from './.Projects/.To-Do App/project';
+// import ToDoForm from './.Projects/.To-Do App/project';
+// import Counters from './Day-6/1.stale_closure';
+import Doubles from './Day-6/2.DoubleClickStaleClosure';
 
 createRoot(document.getElementById('root')).render(
   <>  
@@ -28,6 +30,8 @@ createRoot(document.getElementById('root')).render(
   {/* <EULA /> */}
   {/* <EULAObj /> */}
   {/* <Radio /> */}
-  <ToDoForm />
+  {/* <ToDoForm /> */}
+  {/* <Counters/> */}
+  <Doubles />
   </>
 )
