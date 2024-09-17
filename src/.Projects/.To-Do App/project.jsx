@@ -1,86 +1,74 @@
 import { useState } from "react";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Picker from "emoji-picker-react";
+/**
+ * Phase 1 - Implement a form to accept todo from user
+ */
 
-const ToDoForm = () => {
-  const [form, setForm] = useState({
-    title: "",
-    description: "",
-  });
-  const [getValue, setGetValue] = useState([]);
+const Todos = () => {
+  const [todoTitle, setTodoTitle] = useState("");
+  const [todoList, setTodoList] = useState([]);
+  const []
 
-  const changeValue = (e) => {
-    const { name, value } = e.target;
-    setForm((pehlekaData) => ({
-      ...pehlekaData,
-      [name]: value,
-    }));
-  };
-
-  const submitValue = (e) => {
-    e.preventDefault();
-    // console.log(form);
-    // console.log(getValue);
-
-    if (form.title && form.description) {
-      setGetValue((pehlekaData) => [...pehlekaData, form]);
-      setForm({
-        title: "",
-        description: "",
+  const onAddTodo = () => {
+    if (!todoTitle) {
+      toast.error("Please enter a todo title", {
+        position: "top-right",
+        autoClose: 3000, 
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
       });
+      return;
     }
+
+    setTodoList((prevState) => [...prevState, todoTitle]);
+    setTodoTitle("");
   };
 
-  const editValue = (index) => {
-
-  };
-
-  const deleteValue = (index) => {
-    setGetValue((pehlekaData) => pehlekaData.filter((_, i) => i !== index));
-  };
-
+  console.log("Re-Render: ", todoTitle, todoList);
   return (
-    <div className="searchContainer">
-      <span style={{ fontWeight: "bold", fontSize: "20px" }}>To-Do Form</span>
-      <form onSubmit={submitValue}>
-        <div className="searchForm" style={{ marginBottom: "10px" }}>
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            placeholder="Title"
-            onChange={changeValue}
-            className="searchColor"
-          />
-          <input
-            type="text"
-            name="description"
-            value={form.description}
-            placeholder="Description"
-            onChange={changeValue}
-            className="searchColor"
-          />
-          <button type="submit" className="buttonColor">
-            Search
-          </button>
-        </div>
-      </form>
+    <div>
       <div>
-        {getValue.map((item, index) => (
-          <div key={index} style={{ marginBottom: "10px", border: "2px solid black", padding:"10px", width:"300px"}}>
-            <strong>Title: </strong>{item.title}
-            <br />
-            <strong>Description: </strong>{item.description}
-            <br />
-            <button className="editClass" style={{margin:"4px"}} onClick={() => editValue(index)}>
-              Edit
-            </button>
-            <button className="deleteClass" style={{margin: "4px"}} onClick={() => deleteValue(index)}>
-              Delete
-            </button>
-          </div>
-        ))}
+        <p>New Todo Title</p>
+        <input
+          type="text"
+          value={todoTitle}
+          placeholder="Enter your new todo title here."
+          onChange={(e) => setTodoTitle(e.target.value)}
+        />
+        <button onClick={onAddTodo}>Add Todo</button>
       </div>
+      <hr />
+      <div>
+        <h1>My Todos</h1>
+        <hr />
+        {todoList?.length > 0 ? (
+          <ul>
+            {todoList.map((item, index) => {
+              return (
+                <li key={index}>
+                  <div>
+                    <p>{item}</p>
+                    <button>Edit</button>
+                    <button>Delete</button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p>No todo available</p>
+        )}
+      </div>
+      <ToastContainer />
     </div>
   );
 };
 
-export default ToDoForm;
+export default Todos;
