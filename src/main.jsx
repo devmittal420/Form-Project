@@ -33,8 +33,13 @@ import { createRoot } from "react-dom/client";
 // import SideBarComponent from './Day-14/Saturday-discussion/2.Debugging';
 // import TrialComponent from './Day-15/1.Reusable components/0.trail';
 // import ProductsTrial from './Day-15/2.APi components/0. Products';
+// import DynamicForm from './.Projects/.Dynamic Form/1.form';
 // import Form from './Day-16/1.form';
-import DynamicForm from './.Projects/.Dynamic Form/1.form';
+// import ParentCounter from "./Day-17/1. Parent-counter";
+// import ParentCounter2 from './Day-17/1.2 parent-counter';
+// import ProductsTrial3 from './Day-17/2.2 parent-counter';
+// import TodoList from './Day-18/1.new';
+import TodoList1 from './.Tasks/1.Edit button with dialog/1. Parent';
 
 createRoot(document.getElementById("root")).render(
   <>
@@ -70,6 +75,11 @@ createRoot(document.getElementById("root")).render(
     {/* <TrialComponent /> */}
     {/* <ProductsTrial /> */}
     {/* <Form /> */}
-    <DynamicForm />
+    {/* <DynamicForm /> */}
+    {/* <ParentCounter /> */}
+    {/* <ParentCounter2 /> */}
+    {/* <ProductsTrial3 /> */}
+    {/* <TodoList /> */}
+    <TodoList1 />
   </>
 );

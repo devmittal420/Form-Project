@@ -21,9 +21,10 @@ const DynamicForm = () => {
     setFormFill((prev) => [...prev, newField]);
   };
 
-  const handleSubmit = ()=> {
+  const handleSubmit = (e) => {
     e.preventDefault();
-  }
+    console.log("formFill: ", formFill);
+  };
 
   return (
     <div>
@@ -61,7 +62,7 @@ const DynamicForm = () => {
             placeholder={item.placeholder}
             onChange={handleChange}
           />
-          <button >Submit</button>
+          <button>Submit</button>
         </div>
       ))}
     </div>

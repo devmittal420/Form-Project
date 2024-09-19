@@ -29,22 +29,25 @@ src/Day-4/2.Begineerform.jsx
 src/Day-4/3.AdvanceForm.jsx
 
 # Ignoring directories
-src/Day-3/
 src/Day-2/
+src/Day-3/
 src/Day-4/
-src/Day-11/
 src/Day-5/
 src/Day-6/
+src/Day-7/
+src/Day-8/
+src/Day-9/
+src/Day-10/
+src/Day-11/
 src/Day-12/
 src/Day-14/
 src/Day-13/
 src/Day-15/
 src/Day-16/
+src/Day-17/*
+src/Day-18/*
 src/Day-6/1.stale_closure.jsx
-src/Day-7/
-src/Day-8/
-src/Day-9/
-src/Day-10/
+
 
 #Ignore .gitignore files
 .gitignore
