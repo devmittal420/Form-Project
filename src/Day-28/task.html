@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+</html>
+
+<script>
+  var obj = {
+    a: {
+      b: {
+        c: 12,
+        j: false,
+      },
+      k: null,
+    },
+  };
+
+  const findPath = (object, path) => {
+    const splitPath = path.split(".");
+    // console.log("path", splitPath);
+    // console.log("object", object);
+    let newObj = object;
+
+    for (let i = 0; i < splitPath.length; i++) {
+      if (newObj[splitPath[i]]) {
+        newObj = newObj[splitPath[i]];
+      } else return undefined;
+    }
+    return newObj;
+  };
+
+  console.log("1", findPath(obj, "a.b.c")); // Output: 12
+  console.log("2", findPath(obj, "a.b.j")); // Output: false
+  console.log("3", findPath(obj, "a.k")); // Output: null
+  console.log("4", findPath(obj, "x.y.z")); // Output: undefined
+</script>

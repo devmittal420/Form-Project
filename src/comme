@@ -1,0 +1,489 @@
+// const [commentText, setCommentText] = useState(false);
+// const [showComments, setShowComments] = useState({});
+
+// const onHandleComment = async (id) => {
+//   if (!user) {
+//     setShowLogin(true);
+//     return;
+//   }
+
+//   const token = await auth.currentUser?.getIdToken();
+//   try {
+//     const response = await axios.post(
+//       `http://localhost:9000/post/${id}/comment`,
+//       { text: commentText[id] || "" },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+
+//     const newComment = response.data.comment;
+
+//     setInstagramPost((prevPosts) =>
+//       prevPosts.map((post) =>
+//         post._id === id
+//          ? { ...post, comments: [...post.comments, newComment] }
+//           : post
+//       )
+//     );
+
+//     setCommentText((prev) => ({ ...prev, [id]: "" }));
+//   } catch (err) {
+//     console.log("err: ", err);
+//   }
+// };
+
+{
+  /* Show/Hide Comments Button */
+}
+// <button
+//   style={{
+//     background: "#4ca3ff",
+//     color: "white",
+//     padding: "8px 12px",
+//     border: "none",
+//     borderRadius: "5px",
+//     cursor: "pointer",
+//     fontSize: "1rem",
+//     marginTop: "5px",
+//     marginRight: "10px",
+//     transition: "background 0.2s ease-in-out",
+//   }}
+//   onClick={() =>
+//     setShowComments((prev) => ({
+//       ...prev,
+//       [post._id]: !prev[post._id],
+//     }))
+//   }
+// >
+//   {showComments[post._id] ? "Hide Comments" : "Show Comments"}
+// </button>;
+
+// {
+//   /* Agar Comments Visible hain to Show karo */
+// }
+// {
+//   showComments[post._id] && (
+//     <div style={{ marginTop: "10px" }}>
+//       {post.comments.map((comment, index) => (
+//         <p key={index} style={{ fontWeight: "500" }}>
+//           {comment.text}
+//         </p>
+//       ))}
+
+//       <div>
+//         <input
+//           type="text"
+//           value={commentText[post._id] || ""}
+//           onChange={(e) =>
+//             setCommentText((prev) => ({
+//               ...prev,
+//               [post._id]: e.target.value,
+//             }))
+//           }
+//           placeholder="Write a comment..."
+//         />
+//         <button
+//           onClick={() => onHandleComment(post._id)}
+//           style={{ marginLeft: "2px" }}
+//         >
+//           Send
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import axios from "axios";
+import { useEffect, useRef, useState } from "react";
+import Login from "./Login/login";
+import { auth } from "../FirebaseLogin/firebase"; // Import Firebase auth
+import { signOut } from "firebase/auth";
+import { FaHeart, FaRegHeart, FaComment } from "react-icons/fa";
+import "tailwindcss";
+
+const InstagramPost = () => {
+  const [instagramPost, setInstagramPost] = useState([]);
+  const [page, setPage] = useState(1); // page load checking
+  const [hasMore, setHasMore] = useState(true); // agar aur post hai to true otherwise false.
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null); // check logged-in user
+  const [showLogin, setShowLogin] = useState(false); // show login popup
+  const observerRef = useRef(null); // used for infinite scrolling
+  const [updateLike, setUpdateLike] = useState(false);
+  const [commentText, setCommentText] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  // const [liked, setLiked] = useState(false);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); // Set user if logged in
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:9000/allpost?page=${page}`
+        );
+        if (response.data.length === 0) {
+          setHasMore(false); // agar aage data nhi hai to false
+        } else {
+          setInstagramPost((prev) => [...prev, ...response.data]); // jo prev post the unke saath new add kr diye
+        }
+      } catch (err) {
+        console.log("err: ", err);
+      }
+      setLoading(false);
+    };
+    fetchPost();
+  }, [page]);
+
+  // Infinite Scrolling
+  useEffect(() => {
+    if (!hasMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+    return () => observer.disconnect();
+  }, [hasMore]);
+
+  // Like section
+  const onHandleLike = async (id) => {
+    if (!user) {
+      setShowLogin(true); // if user is not logged in show popup
+      return;
+    }
+
+    const token = await auth.currentUser?.getIdToken();
+    try {
+      const response = await axios.put(
+        `http://localhost:9000/post/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const updatedLikes = response.data.likes;
+      setUpdateLike((prev) => ({
+        ...prev,
+        [id]: updatedLikes,
+      }));
+      setInstagramPost((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === id ? { ...post, likes: updatedLikes } : post
+        )
+      );
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  };
+
+  // Comment section
+
+  const onHandleComment = async (id) => {
+    if (!user) {
+      setShowLogin(true);
+      return;
+    }
+
+    const token = await auth.currentUser?.getIdToken();
+    try {
+      const response = await axios.post(
+        `http://localhost:9000/post/${id}/comment`,
+        { text: commentText[id] || "" },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const newComment = response.data.comment;
+
+      setInstagramPost((prevPosts) =>
+        prevPosts.map((post) =>
+          post._id === id
+            ? { ...post, comments: [...post.comments, newComment] }
+            : post
+        )
+      );
+
+      setCommentText((prev) => ({ ...prev, [id]: "" }));
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  };
+
+  // Logout
+  const handleLogout = async () => {
+    await signOut(auth);
+    setUser(null);
+    localStorage.removeItem("user");
+    setShowLogin(false);
+  };
+
+  return (
+    <div
+      style={{
+        background: "#fdfdfd",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+        textAlign: "center",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#201a1a",
+      }}
+    >
+      {/* Logout Button only if logged in */}
+      {user && (
+        <button
+          onClick={handleLogout}
+          style={{
+            background: "#ff4d4d",
+            color: "white",
+            padding: "10px 15px",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "1rem",
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+          }}
+        >
+          Logout
+        </button>
+      )}
+      <h1
+        style={{
+          fontSize: "3rem",
+          fontWeight: "bold",
+          marginBottom: "20px",
+          background:
+            "linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4)", // Instagram gradient
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          display: "inline-block",
+          marginTop: "20px",
+          border:
+            "1px solid linear-gradient(45deg, #f58529, #dd2a7b, #8134af, #515bd4)",
+        }}
+      >
+        Instagram
+      </h1>
+
+      {instagramPost.length === 0 ? (
+        <p style={{ fontSize: "1.2rem", color: "#888" }}>No Posts available</p>
+      ) : (
+        instagramPost.map((post) => (
+          <div
+            key={post._id}
+            style={{
+              background: "#fff",
+              padding: "15px",
+              margin: "15px 0",
+              borderRadius: "10px",
+              boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
+              textAlign: "left",
+              minHeight: "6rem",
+            }}
+          >
+            <p style={{ marginBottom: "20px", textTransform: "capitalize" }}>
+              <strong>Title:</strong> {post.title}
+            </p>
+
+            <blockquote
+              className="instagram-media"
+              data-instgrm-permalink={post.video}
+              data-instgrm-version="14"
+            ></blockquote>
+            <script async src="https://www.instagram.com/embed.js"></script>
+
+            <div style={{ position: "relative" }}>
+              {/* Show/Hide Comments Button */}
+              <button
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                  transition: "background 0.2s ease-in-out",
+                  position: "absolute",
+                  bottom: "430px",
+                  right: "10px",
+                }}
+                onClick={() =>
+                  setShowComments((prev) => ({
+                    ...prev,
+                    [post._id]: !prev[post._id],
+                  }))
+                }
+              >
+                {showComments[post._id] ? (
+                  <FaComment size={26} color="yellow" />
+                ) : (
+                  <FaComment size={26} />
+                )}
+              </button>
+
+              {/* Agar Comments Visible hain to Show karo */}
+              {showComments[post._id] && (
+                <div style={{ marginTop: "10px" }}>
+                  {post.comments.map((comment, index) => (
+                    <p key={index} style={{ fontWeight: "500" }}>
+                      {comment.text}
+                    </p>
+                  ))}
+
+                  <div>
+                    <input
+                      type="text"
+                      value={commentText[post._id] || ""}
+                      onChange={(e) =>
+                        setCommentText((prev) => ({
+                          ...prev,
+                          [post._id]: e.target.value,
+                        }))
+                      }
+                      placeholder="Write a comment..."
+                    />
+                    <button
+                      onClick={() => onHandleComment(post._id)}
+                      style={{ marginLeft: "2px" }}
+                    >
+                      Send
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <button
+                style={{
+                  background: "transparent",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                  marginTop: "5px",
+                  transition: "background 0.2s ease-in-out",
+                  position: "absolute",
+                  bottom: "340px",
+                  right: "10px",
+                }}
+                onClick={() => onHandleLike(post._id)}
+              >
+                {updateLike[post._id] || post.likes ? (
+                  <FaHeart size={26} color="red" />
+                ) : (
+                  <FaRegHeart size={26} />
+                )}
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                    color: "#fff",
+                    marginTop: "0",
+                  }}
+                >
+                  {updateLike[post._id] || post.likes}
+                </p>
+              </button>
+            </div>
+          </div>
+        ))
+      )}
+
+      {loading && <p>Loading...</p>}
+      <div ref={observerRef} style={{ height: "10px" }}></div>
+      {!hasMore && <p>No more post to load</p>}
+
+      {/*  Show login form when user clicked on like without login */}
+      {showLogin && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <div
+            style={{
+              background: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              textAlign: "center",
+              boxShadow: "0 3px 6px rgba(0,0,0,0.3)",
+              minWidth: "20rem",
+            }}
+          >
+            <h2 style={{ marginBottom: "20px", fontWeight: "800" }}>Login</h2>
+            <Login setUser={setUser} setShowLogin={setShowLogin} />
+            <button
+              onClick={() => setShowLogin(false)}
+              style={{
+                marginTop: "10px",
+                background: "red",
+                color: "white",
+                padding: "8px 12px",
+                border: "none",
+                borderRadius: "5px",
+                cursor: "pointer",
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default InstagramPost;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <p>Items</p>
+      <div id="productdata"></div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const data = async () => {
+    const apidata = await fetch("https://fakestoreapi.com/products");
+    const response = await apidata.json();
+    fetchData(response);
+  };
+
+  const productElem = document.getElementById("productdata");
+
+  const fetchData = (listItem) => {
+    const fragment = document.createDocumentFragment();
+
+    listItem.forEach((item) => {
+      const { image, title, price, category } = item;
+
+      const divElem = document.createElement("div");
+
+      const imageElem = document.createElement("img");
+      imageElem.src = image;
+
+      const titleELem = document.createElement("p");
+      titleELem.innerHTML = title;
+
+      const priceELem = document.createElement("p");
+      priceELem.innerHTML = price;
+
+      const categoryELem = document.createElement("p");
+      categoryELem.innerHTML = category;
+
+      divElem.append(imageElem, titleELem, priceELem, categoryELem);
+      fragment.appendChild(divElem);
+    });
+
+    productElem.appendChild(fragment);
+  };
+  data();
+</script>

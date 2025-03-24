@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do Form</title>
+  </head>
+  <body>
+    <div>
+      <h1>To-Do list</h1>
+      <div>
+        <p>Name</p>
+        <input id="name" type="text" placeholder="Enter Your Name" />
+        <p>City</p>
+        <input id="city" type="text" placeholder="Enter Your City" />
+        <br />
+        <button id="addBtn">Add</button>
+      </div>
+      <div>
+        <p>To-DO List</p>
+        <div id="todoList"></div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  const addButton = document.getElementById("addBtn");
+  const listElem = document.getElementById("todoList");
+
+  const TodoItem = () => {
+    const inputName = document.getElementById("name").value;
+    const inputCity = document.getElementById("city").value;
+
+    console.log("inputName: ", inputName);
+    console.log("inputName: ", inputCity);
+
+    const divElem = document.createElement("div");
+
+    const nameElem = document.createElement("p");
+    nameElem.innerHTML = `Name: ${inputName}`;
+
+    const cityElem = document.createElement("p");
+    cityElem.innerHTML = `City: ${inputCity}`;
+
+    divElem.append(nameElem, cityElem);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = "Delete";
+
+    deleteBtn.addEventListener("click", () => {
+      listElem.removeChild(divElem);
+    });
+    divElem.appendChild(deleteBtn);
+
+    listElem.appendChild(divElem);
+
+    document.getElementById("name").value = "";
+    document.getElementById("city").value = "";
+  };
+  addButton.addEventListener("click", TodoItem);
+</script>

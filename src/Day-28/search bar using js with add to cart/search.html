@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+    <style>
+      .imgClass {
+        height: 3rem;
+        width: 3rem;
+      }
+      .divClass {
+        border: 2px solid black;
+        width: 350px;
+        height: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="search" placeholder="Search here" id="searchInput" />
+    </div>
+    <div>
+      <p>Items</p>
+      <ul id="itemList"></ul>
+    </div>
+    <div>
+      <p>Cart Items</p>
+      <ul id="cartList"></ul>
+    </div>
+  </body>
+</html>
+
+<script>
+  let getProducts = [];
+  let cart = [];
+
+  const data = async () => {
+    const fetchApi = await fetch("https://fakestoreapi.com/products");
+    const response = await fetchApi.json();
+    getProducts = response;
+    ProductData(getProducts);
+  };
+
+  const searchElem = document.getElementById("searchInput");
+
+  searchElem.addEventListener("input", (e) => {
+    const searchValue = e.target.value.toLowerCase();
+
+    const filterProducts = getProducts.filter((itemData) => {
+      return itemData.title.toLowerCase().includes(searchValue);
+    });
+    ProductData(filterProducts);
+  });
+
+  const userElem = document.getElementById("itemList");
+
+  const ProductData = (product) => {
+    const fragment = document.createDocumentFragment();
+
+    product.forEach((item) => {
+      const { image, title, price, category } = item;
+
+      const divElem = document.createElement("div");
+      divElem.classList = "divClass";
+
+      const imageElem = document.createElement("img");
+      imageElem.src = image;
+      imageElem.classList = "imgClass";
+
+      const titleElem = document.createElement("p");
+      titleElem.innerHTML = `Title: ${title}`;
+
+      const priceElem = document.createElement("p");
+      priceElem.innerHTML = `Price: ${price}`;
+
+      const categoryElem = document.createElement("p");
+      categoryElem.innerHTML = `Category: ${category}`;
+
+      const addbtn = document.createElement("button");
+      addbtn.innerHTML = "Add to cart";
+
+      addbtn.addEventListener("click", () => {
+        cart.push(item);
+        DisplayCart();
+      });
+
+      divElem.append(imageElem, titleElem, priceElem, categoryElem, addbtn);
+      fragment.appendChild(divElem);
+    });
+    userElem.innerHTML = "";
+    userElem.appendChild(fragment);
+  };
+
+  const DisplayCart = () => {
+    const cartElem = document.getElementById("cartList");
+
+    if (cart.length === 0) {
+      cartElem.innerHTML = "No items available";
+    } else {
+      cart.forEach((item, index) => {
+        const divElem = document.createElement("div");
+
+        const imageElem = document.createElement("img");
+        imageElem.src = item.image;
+
+        const priceElem = document.createElement("p");
+        priceElem.innerHTML = item.price;
+
+        const titleElem = document.createElement("p");
+        titleElem.innerHTML = item.title;
+
+        const removebtn = document.createElement("button");
+        removebtn.innerHTML = "Remove";
+
+        removebtn.addEventListener("click", () => {
+          cart.splice(index, 1);
+          DisplayCart();
+        });
+
+        divElem.append(imageElem, priceElem, titleElem, removebtn);
+        cartElem.appendChild(divElem);
+      });
+    }
+  };
+
+  data();
+</script>

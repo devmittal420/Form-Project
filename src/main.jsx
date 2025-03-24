@@ -1,5 +1,15 @@
 // import './index.css'
 import { createRoot } from "react-dom/client";
+import Product from "./Fetch Product/Product";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import ParentCompUseCB from "./Day-27/Usecallback and memo example/parent";
+import Cart from "./Fetch Product/Cart";
+// import TreeComponent from "./Material tree/tree";
+// import Parent from "./Day-26/parentComp";
+// import SecondProductListHOC from "./Day-24/anotherHOC/secondproductdetailsHOC";
+// import ProductListHOC from "./Day-24/withHOC/productDetails";
+// import ProductList from "./Day-24/withoutHOC/loader";
 // import { StrictMode } from 'react'
 // import App from './App.jsx'
 // import About from "./About.jsx"
@@ -39,7 +49,13 @@ import { createRoot } from "react-dom/client";
 // import ParentCounter2 from './Day-17/1.2 parent-counter';
 // import ProductsTrial3 from './Day-17/2.2 parent-counter';
 // import TodoList from './Day-18/1.new';
-import TodoList1 from './.Tasks/1.Edit button with dialog/1. Parent';
+// import TodoList1 from './.Tasks/1.Edit button with dialog/1. Parent';
+// import ReusableInputs from "./Day-19/1.Reusable";
+// import ReusableInputs3 from './Day-19/3.Reusable-components';
+// import FetchProductList from './Day-21/product-list';
+// import ProblemSolveWithUseRef from "./Day-23/1. useRef_problem_solving";
+// import AutoFocusWithReactJSUseRef from "./Day-23/2. useRef using with multiple input"
+// import UseRefWithQueryParameter from "./Day-23/3.using_queryParameter_in_useRef"
 
 createRoot(document.getElementById("root")).render(
   <>
@@ -80,6 +96,20 @@ createRoot(document.getElementById("root")).render(
     {/* <ParentCounter2 /> */}
     {/* <ProductsTrial3 /> */}
     {/* <TodoList /> */}
-    <TodoList1 />
+    {/* <TodoList1 /> */}
+    {/* <ReusableInputs /> */}
+    {/* <ReusableInputs3 /> */}
+    {/* <FetchProductList /> */}
+    {/* <ProblemSolveWithUseRef /> */}
+    {/* <AutoFocusWithReactJSUseRef /> */}
+    {/* <UseRefWithQueryParameter /> */}
+    {/* <ProductList /> */}
+    {/* <ProductListHOC /> */}
+    {/* <SecondProductListHOC /> */}
+    {/* <TreeComponent /> */}
+    {/* <ParentCompUseCB/> */}
+    <Product />
+    <Cart />
+    <ToastContainer autoClose="3000" />
   </>
 );

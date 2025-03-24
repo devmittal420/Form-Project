@@ -49,6 +49,9 @@ src/Day-18/*
 src/Day-6/1.stale_closure.jsx
 
 
+
+src/Instagram create/FirebaseLogin/firebase.js
+
 #Ignore .gitignore files
 .gitignore
 
